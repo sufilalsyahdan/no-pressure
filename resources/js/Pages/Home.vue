@@ -1,5 +1,5 @@
 <template>
-    <section class="h-screen bg-stone-300 relative">
+    <section class="min-h-screen bg-stone-300 relative">
         <div v-if="canLogin" class="hidden fixed top-0 right-0 px-6 py-4 sm:block">
             <Link v-if="$page.props.user" :href="route('pins')" class="text-sm text-gray-700 dark:text-gray-500 underline">Pins</Link>
 
