@@ -32,7 +32,5 @@ Route::middleware([
     'verified',
 ])->group(function () {
     Route::get('/pins', [PinController::class, 'index'])->name('pins');
-    Route::post('/pins/create', [PinController::class, 'create'])->name('pin.create');
-    Route::post('/pins/store', [PinController::class, 'store'])->name('pin.create');
-    Route::post('/pins/destroy', [PinController::class, 'destroy'])->name('pin.destroy');
+    Route::resource('pins', PinController::class, ['except' => ['index']]);
 });

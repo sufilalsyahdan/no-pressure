@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StorepinRequest;
 use App\Http\Requests\UpdatepinRequest;
 use App\Models\Pin;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class PinController extends Controller
@@ -40,7 +42,13 @@ class PinController extends Controller
      */
     public function store(StorepinRequest $request)
     {
-        //
+        Pin::create([
+            'title' => $request->input('title'),
+            'description' => $request->input('description'),
+            'user_id' => Auth::user()->id,
+        ]);
+
+        return redirect()->to('pins');
     }
 
     /**
@@ -74,7 +82,21 @@ class PinController extends Controller
      */
     public function update(UpdatepinRequest $request, Pin $Pin)
     {
-        //
+        Pin::create([
+            'title' => $request->input('title'),
+            'description' => $request->input('description'),
+            'user_id' => Auth::user()->id,
+        ]);
+
+        return redirect()->to('pins');
+    }
+
+    public function markAsDone(Request $request, Pin $Pin)
+    {
+        Pin::where('id', $request->id)
+            ->update(['is_done' => 1]);
+
+        return redirect()->to('pins');
     }
 
     /**

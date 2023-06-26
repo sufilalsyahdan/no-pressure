@@ -1,12 +1,8 @@
 <template>
-    <!-- <div class="bg-indigo-100 border border-indigo-300 py-2 px-4 rounded flex flex-row space-x-4">
-        <input type="checkbox" />
-        <p>{{ todo.title }}</p>
-    </div> -->
 
     <div v-if="todo.is_done"
         class="flex justify-between items-center border-b border-slate-200 py-3 px-2 border-l-4  border-l-transparent">
-        <div class="inline-flex items-center space-x-2 hover:cursor-pointer" @click="markAsDone">
+        <div class="inline-flex items-center space-x-2 hover:cursor-pointer" @click="markAsDone(todo.id)">
             <div>
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                     stroke="currentColor" class="w-6 h-6 text-slate-500">
@@ -26,7 +22,7 @@
 
     <div v-if="!todo.is_done"
         class="flex justify-between items-center border-b border-slate-200 py-3 px-2 border-l-4  border-l-transparent bg-gradient-to-r from-transparent to-transparent hover:from-indigo-100 transition ease-linear duration-150 ">
-        <div class="inline-flex items-center space-x-2 hover:cursor-pointer" @click="markAsDone">
+        <div class="inline-flex items-center space-x-2 hover:cursor-pointer" @click="markAsDone(todo.id)">
             <div>
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                     stroke="currentColor" class="w-6 h-6 text-slate-500 hover:text-indigo-600 hover:cursor-pointer">
@@ -52,12 +48,12 @@
 </template>
 
 <script setup>
-
+import { Inertia } from '@inertiajs/inertia'
 const props = defineProps([
     'todo',
 ]);
 
-const markAsDone = () => {
-    console.log('done');
+const markAsDone = (id) => {
+    Inertia.visit('pins', { method: 'put' })
 }
 </script>
