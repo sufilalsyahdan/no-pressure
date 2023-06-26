@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StorepinRequest;
 use App\Http\Requests\UpdatepinRequest;
 use App\Models\Pin;
+use Inertia\Inertia;
 
 class PinController extends Controller
 {
@@ -15,7 +16,10 @@ class PinController extends Controller
      */
     public function index()
     {
-        //
+        $pins = Pin::latest()->get();
+        return Inertia::render('Pins', [
+            'pins' => $pins
+        ]);
     }
 
     /**

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Pin extends Model
 {
@@ -15,8 +16,13 @@ class Pin extends Model
         'description'
     ];
 
-    public function User() {
+    public function User()
+    {
         return $this->belongsTo(User::class);
     }
 
+    public function tasks(): HasMany
+    {
+        return $this->hasMany(Task::class);
+    }
 }
