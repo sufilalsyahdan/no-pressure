@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StorepinRequest;
 use App\Http\Requests\UpdatepinRequest;
 use App\Models\Pin;
+use App\Models\Task;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -18,9 +19,12 @@ class PinController extends Controller
      */
     public function index()
     {
-        $pins = Pin::latest()->get();
+        $pin = Pin::where('user_id', Auth::user()->id)->latest()->first();
+        $tasks = $pin->tasks;
+
         return Inertia::render('Pins', [
-            'pins' => $pins
+            'pin' => $pin,
+            'tasks' => $tasks,
         ]);
     }
 
@@ -46,6 +50,26 @@ class PinController extends Controller
             'title' => $request->input('title'),
             'description' => $request->input('description'),
             'user_id' => Auth::user()->id,
+        ]);
+
+        return redirect()->to('pins');
+    }
+
+    public function makeTask(Request $request)
+    {
+        $validated = $request->validate([
+            'text' => 'required|max:255',
+            'pin_id' => 'required',
+        ]);
+
+        if (!$validated) {
+            return redirect()->to('pins')->withErrors(['error' => 'Text is required.']);
+        }
+        
+        Task::create([
+            'text' => $request->input('text'),
+            'priority' => $request->input('priority'),
+            'pin_id' => $request->input('pin_id'),
         ]);
 
         return redirect()->to('pins');
@@ -82,18 +106,12 @@ class PinController extends Controller
      */
     public function update(UpdatepinRequest $request, Pin $Pin)
     {
-        Pin::create([
-            'title' => $request->input('title'),
-            'description' => $request->input('description'),
-            'user_id' => Auth::user()->id,
-        ]);
-
-        return redirect()->to('pins');
+        //
     }
 
-    public function markAsDone(Request $request, Pin $Pin)
+    public function markAsDone(Request $request, Task $Task)
     {
-        Pin::where('id', $request->id)
+        Task::where('id', $request->id)
             ->update(['is_done' => 1]);
 
         return redirect()->to('pins');

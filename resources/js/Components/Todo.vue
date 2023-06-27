@@ -1,7 +1,11 @@
 <template>
-
     <div v-if="todo.is_done"
-        class="flex justify-between items-center border-b border-slate-200 py-3 px-2 border-l-4  border-l-transparent">
+        class="flex justify-between items-center border-b border-slate-200 py-3 px-2 border-l-4  border-l-transparent"
+        :class="{
+            'border-l-4 border-l-rose-300 bg-gradient-to-r from-rose-100 to-transparent hover:from-rose-200 transition ease-linear duration-150': todo.priority == 1,
+            'border-l-4 border-l-rose-600 bg-gradient-to-r from-rose-400 to-transparent hover:from-rose-500 transition ease-linear duration-150': todo.priority == 2,
+            'border-l-4 border-l-rose-900- bg-gradient-to-r from-rose-700 to-transparent hover:from-rose-800 transition ease-linear duration-150': todo.priority == 3
+        }">
         <div class="inline-flex items-center space-x-2 hover:cursor-pointer" @click="markAsDone(todo.id)">
             <div>
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -9,11 +13,11 @@
                     <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                 </svg>
             </div>
-            <div class="text-slate-500 line-through">{{ todo.title }}</div>
+            <div class="text-slate-500 line-through">{{ todo.text }}</div>
         </div>
         <div>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                class="w-5 h-5 text-slate-500 hover:text-slate-700 hover:cursor-pointer">
+                class="w-5 h-5 text-rose-500 hover:text-rose-700 hover:cursor-pointer">
                 <path stroke-linecap="round" stroke-linejoin="round"
                     d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
             </svg>
@@ -21,7 +25,13 @@
     </div>
 
     <div v-if="!todo.is_done"
-        class="flex justify-between items-center border-b border-slate-200 py-3 px-2 border-l-4  border-l-transparent bg-gradient-to-r from-transparent to-transparent hover:from-indigo-100 transition ease-linear duration-150 ">
+        class="flex justify-between items-center border-b border-slate-200 py-3 px-2 border-l-4  border-l-transparent bg-gradient-to-r from-transparent to-transparent hover:from-indigo-100 transition ease-linear duration-150 "
+        :class="{ 
+            'border-l-4 border-l-rose-300 bg-gradient-to-r from-rose-100 to-transparent hover:from-rose-200 transition ease-linear duration-150': todo.priority == 1,
+            'border-l-4 border-l-rose-600 bg-gradient-to-r from-rose-400 to-transparent hover:from-rose-500 transition ease-linear duration-150': todo.priority == 2,
+            'border-l-4 border-l-rose-900- bg-gradient-to-r from-rose-700 to-transparent hover:from-rose-800 transition ease-linear duration-150': todo.priority == 3
+         }">
+        
         <div class="inline-flex items-center space-x-2 hover:cursor-pointer" @click="markAsDone(todo.id)">
             <div>
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -30,7 +40,7 @@
                         d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
             </div>
-            <div>{{ todo.title }}</div>
+            <div>{{ todo.text }}</div>
         </div>
         <div class="inline-flex items-center space-x-2">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
@@ -47,13 +57,22 @@
     </div>
 </template>
 
-<script setup>
-import { Inertia } from '@inertiajs/inertia'
-const props = defineProps([
-    'todo',
-]);
+<script>
+import AppLayout from '@/Layouts/AppLayout.vue';
+import { Inertia } from '@inertiajs/inertia';
 
-const markAsDone = (id) => {
-    Inertia.visit('pins', { method: 'put' })
+
+export default {
+    props: {
+        todo: Object,
+    },
+    components: {
+        AppLayout,
+    }, 
+    methods:{
+        markAsDone: function(id){
+            Inertia.put(`/done/${id}`, {id})
+        }
+    }
 }
 </script>

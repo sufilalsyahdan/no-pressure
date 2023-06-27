@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
             $table->string('text', 250);
-            $table->integer('is_done',);
+            $table->integer('is_done',)->default(0);
             $table->integer('priority',)->nullable();
 
             $table->foreignId('pin_id')

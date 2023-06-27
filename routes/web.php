@@ -33,4 +33,6 @@ Route::middleware([
 ])->group(function () {
     Route::get('/pins', [PinController::class, 'index'])->name('pins');
     Route::resource('pins', PinController::class, ['except' => ['index']]);
+    Route::put('/done/{id}', [PinController::class, 'markAsDone']);
+    Route::post('/tasks', [PinController::class, 'makeTask']);
 });
