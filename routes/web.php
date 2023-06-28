@@ -34,5 +34,7 @@ Route::middleware([
     Route::get('/pins', [PinController::class, 'index'])->name('pins');
     Route::resource('pins', PinController::class, ['except' => ['index']]);
     Route::put('/done/{id}', [PinController::class, 'markAsDone']);
+    Route::put('/deleteTask/{id}', [PinController::class, 'deleteTask']);
+    Route::put('/updateTask/{id}', [PinController::class, 'updateTask']);
     Route::post('/tasks', [PinController::class, 'makeTask']);
 });

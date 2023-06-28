@@ -23,6 +23,8 @@ class Pin extends Model
 
     public function tasks(): HasMany
     {
-        return $this->hasMany(Task::class);
+        return $this->hasMany(Task::class)
+            ->orderBy('is_done', 'asc')
+            ->orderBy('priority', 'desc');
     }
 }

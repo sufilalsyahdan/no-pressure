@@ -19,12 +19,14 @@ class PinController extends Controller
      */
     public function index()
     {
-        $pin = Pin::where('user_id', Auth::user()->id)->latest()->first();
-        $tasks = $pin->tasks;
+        $pin = Pin::where('user_id', Auth::user()->id)
+            
+            ->latest()
+            ->first();
 
         return Inertia::render('Pins', [
             'pin' => $pin,
-            'tasks' => $tasks,
+            'tasks' => $pin->tasks ?? [],
         ]);
     }
 
@@ -117,6 +119,24 @@ class PinController extends Controller
         return redirect()->to('pins');
     }
 
+    public function updateTask(Request $request, Task $Task)
+    {
+        Task::where('id', $request->id)
+            ->update([
+                'text' => $request->text,
+                'priority' =>$request->priority,
+            ]);
+
+        return redirect()->to('pins');
+    }
+
+    public function deleteTask(Request $request, Task $Task)
+    {
+        Task::where('id', $request->id)->delete();
+
+        return redirect()->to('pins');
+    }
+
     /**
      * Remove the specified resource from storage.
      *
@@ -125,6 +145,7 @@ class PinController extends Controller
      */
     public function destroy(Pin $Pin)
     {
-        //
+        $Pin->delete();
+        return redirect()->to('pins');
     }
 }
